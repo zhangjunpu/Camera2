@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <!-- 文字的颜色 -->
+    <color name="text_2">#222222</color>
+    <color name="text_3">#333333</color>
+    <color name="text_6">#666666</color>
+    <color name="text_8">#888888</color>
+    <color name="text_9">#999999</color>
+    <color name="text_a">#aaaaaa</color>
+    <color name="text_b">#bbbbbb</color>
+    <color name="text_c">#cccccc</color>
+    <color name="text_d">#dddddd</color>
+    <color name="text_e">#eeeeee</color>
+
+</resources>

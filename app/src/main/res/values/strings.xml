@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TCamera2</string>
+    <string name="capture">拍照</string>
+    <string name="icon">icon</string>
+    <string name="recapture">重拍</string>
+    <string name="switch_camera">切换</string>
+</resources>
