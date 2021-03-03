@@ -147,6 +147,7 @@ class Camera2Manager(context: Context) : ICamera {
         try {
             cameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
                 override fun onOpened(camera: CameraDevice) {
+                    L.vv(curThreadName)
                     cameraDevice = camera
                     createCameraSession()
                 }
@@ -236,7 +237,7 @@ class Camera2Manager(context: Context) : ICamera {
             1
         )
         imageReader?.setOnImageAvailableListener({
-            L.vv("have a new image: $imageReader")
+            L.vv("have a new image: $curThreadName")
             bgHandler?.post {
                 val bitmap = it.acquireNextImage().toBitmap()
                 L.vv("bitmap: ${bitmap.width}/${bitmap.height}")
@@ -271,6 +272,7 @@ class Camera2Manager(context: Context) : ICamera {
                 listOf(surface, imageReader?.surface),
                 object : CameraCaptureSession.StateCallback() {
                     override fun onConfigured(session: CameraCaptureSession) {
+                        L.vv("createCaptureSession onConfigured: $curThreadName")
                         if (cameraDevice == null) return
                         captureSession = session
                         try {
@@ -296,16 +298,12 @@ class Camera2Manager(context: Context) : ICamera {
      * 设置人脸模式模式
      */
     private fun CaptureRequest.Builder.setFaceDetectMode(): Boolean {
-        L.vv("setFaceDetectMode")
         val modes = faceDetectModes ?: return false
         if (isFaceDetect) {
-            L.vv("modes: $modes")
             val key = CaptureRequest.STATISTICS_FACE_DETECT_MODE
             if (modes.contains(CaptureRequest.STATISTICS_FACE_DETECT_MODE_FULL)) {
-                L.vv("face detect full")
                 set(key, CaptureRequest.STATISTICS_FACE_DETECT_MODE_FULL)
             } else if (modes.contains(CaptureRequest.STATISTICS_FACE_DETECT_MODE_SIMPLE)) {
-                L.vv("face detect sample")
                 set(key, CaptureRequest.STATISTICS_FACE_DETECT_MODE_SIMPLE)
             }
         }
@@ -324,9 +322,10 @@ class Camera2Manager(context: Context) : ICamera {
                     request: CaptureRequest,
                     result: TotalCaptureResult
                 ) {
-                    super.onCaptureCompleted(session, request, result)
                     val faces = result.get(CaptureResult.STATISTICS_FACES)
-                    faceCallback?.invoke(faces)
+                    if (!faces.isNullOrEmpty()) {
+                        faceCallback?.invoke(faces)
+                    }
                 }
             },
             bgHandler
@@ -373,7 +372,7 @@ class Camera2Manager(context: Context) : ICamera {
                             startPreview()
                         }
                     }
-                }, null)
+                }, bgHandler)
             }
         } catch (e: CameraAccessException) {
             e.logStackTrace()

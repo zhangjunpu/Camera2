@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.junpu.camera.camera.Camera2Manager
 import com.junpu.camera.camera.ICamera
+import com.junpu.camera.utils.curThreadName
 import com.junpu.log.L
 import com.junpu.utils.setVisibility
 import kotlinx.android.synthetic.main.activity_capture.*
@@ -41,7 +42,7 @@ class CaptureActivity : AppCompatActivity() {
                 imageCapture.setImageBitmap(bitmap)
             }
             doOnFaceDetect {
-                L.vv(it?.size ?: -1)
+                if (!it.isNullOrEmpty()) L.vv("检测到张人脸数量：${it.size}, $curThreadName")
             }
         }
 

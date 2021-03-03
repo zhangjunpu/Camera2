@@ -130,3 +130,6 @@ fun Image.toBitmap(): Bitmap {
     close()
     return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 }
+
+val curThreadName: String
+    get() = Thread.currentThread().name
